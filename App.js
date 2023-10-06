@@ -1,9 +1,14 @@
 import 'react-native-gesture-handler'  // do not touch or delete!
+import {StatusBar, SafeAreaView} from 'react-native'
 
 import AppNavigator from './src/navigators/AppNavigator';
+import {COLORS} from './constants';
 
 export default function App() {
-  return (
-    <AppNavigator />
-  );
+    return (
+        <SafeAreaView style={{flex: 1}}>
+            <StatusBar barStyle={'light-content'} backgroundColor={COLORS.lightGray} />
+            <AppNavigator />
+        </SafeAreaView>
+    );
 }
