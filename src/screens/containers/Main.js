@@ -6,7 +6,7 @@ import {Entypo, Ionicons, MaterialIcons} from '@expo/vector-icons'
 import {COLORS, STRINGS} from '../../../constants'
 import {Home, Offers, Bookings, Account, More} from '../'
 
-import MainDrawer from '../../components/MainDrawer'
+import {MainDrawer} from '../../components'
 
 const Drawer = createDrawerNavigator()
 const Tab = createBottomTabNavigator()
@@ -65,7 +65,7 @@ const screenOptions = {
 const Main = () => {
     return (
         <Drawer.Navigator drawerContent={props => <MainDrawer {...props} />}>
-            <Drawer.Screen name={STRINGS.appName} component={BottomTabNavigator} />
+            <Drawer.Screen name={STRINGS.appName} options={{headerShown: true}}  component={BottomTabNavigator} />
         </Drawer.Navigator>
     )
 }

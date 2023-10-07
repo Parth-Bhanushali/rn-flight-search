@@ -1,22 +1,50 @@
+import {useState} from 'react'
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native'
+
+import {FlightSearchInputs, SpecialFares, SearchFlightsButton, DisplayRefundDescription, WhyUs} from '../../components'
+import {homeStyles} from '../../../styles/main'
+
+const tripTypes = ["ONE WAY", "ROUND TRIP", "MULTICITY"]
 
 const Home = ({ navigation }) => {
-    const navigateToDetails = () => {
-        navigation.navigate('Flight Results')
+    const [activeTabType, setActiveTabType] = useState(tripTypes[0])
+
+    const TripTab = ({ activeTabType, item }) => {
+        return (
+            <TouchableOpacity 
+                activeOpacity={1}
+                style={homeStyles.tab(activeTabType, item)}
+                onPress={() => { setActiveTabType(item) }}
+            >
+                <Text style={homeStyles.tabText(activeTabType, item)}> {item} </Text>
+            </TouchableOpacity>
+        )
     }
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Home</Text>
+        <ScrollView
+            overScrollMode='never'
+            showsVerticalScrollIndicator={false}
+            style={homeStyles.screen}
+        >
+            <View style={{alignItems: 'center', margin: 10}}>
+                <FlatList
+                    data={tripTypes}
+                    renderItem={({ item }) => (<TripTab item={item} activeTabType={activeTabType} />)}
+                    keyExtractor={item => item}
+                    contentContainerStyle={{columnGap: 10, padding: 5}}
+                    horizontal
+                    style={homeStyles.tripTypesFlatList}
+                />
+            </View>
 
-            <Text onPress={navigateToDetails} style={{
-                fontStyle: 'italic',
-                fontWeight: 'bold'
-            }}>Click here to go to Details</Text>
-        </View>
-
-
+            <FlightSearchInputs />
+            <SpecialFares />
+            <SearchFlightsButton />
+            <DisplayRefundDescription />
+            <WhyUs />
+        </ScrollView>
     )
 }
 
