@@ -1,9 +1,21 @@
-import {View, Text} from 'react-native'
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import React from 'react'
 import {MaterialIcons, Feather} from '@expo/vector-icons'
-import {StyleSheet} from 'react-native'
 
 import {COLORS} from '../../../../constants'
+
+var navigator = null
+
+const navigateTo = (comingFrom, fromDest, toDest) => {
+    navigator.navigate({
+        name: 'SelectFlightRoute',
+        params: {
+            comingFrom: comingFrom,
+            fromDestination: fromDest,
+            toDestination: toDest
+        }
+    })
+}
 
 const AskToAddReturnDate = () => {
     return (
@@ -35,21 +47,29 @@ const InputCommon = ({ compName, title, titleDesc, subtitle }) => {
     )
 }
 
-const From = () => {
+const From = ({fromDestination, toDestination}) => {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {navigateTo('from', fromDestination, toDestination)}}
+            style={styles.container}
+        >
             <MaterialIcons name='flight-takeoff' size={24} style={styles.iconStyle} />
-            <InputCommon compName={'From'} title={'New Delhi'} titleDesc={'DEL'} subtitle={'Indira Gandhi International Airport'} />
-        </View>
+            <InputCommon compName={'From'} title={fromDestination.city} titleDesc={fromDestination.code} subtitle={fromDestination.airport} />
+        </TouchableOpacity>
     )
 }
 
-const To = () => {
+const To = ({fromDestination, toDestination}) => {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {navigateTo('to', fromDestination, toDestination) }}
+            style={styles.container}
+        >
             <MaterialIcons name='flight-land' size={24} style={styles.iconStyle} />
-            <InputCommon compName={'To'} title={'Mumbai'} titleDesc={'BOM'} subtitle={'Chhatrapati Shivaji International Airport'} />
-        </View>
+            <InputCommon compName={'To'} title={toDestination.city} titleDesc={toDestination.code} subtitle={toDestination.airport} />
+        </TouchableOpacity>
     )
 }
 
@@ -88,11 +108,12 @@ const TravelersAndClass = () => {
     )
 }
 
-const FlightSearchInputs = () => {
+const FlightSearchInputs = ({navigation, fromDestination, toDestination}) => {
+    navigator = navigation
     return (
         <View>
-            <From />
-            <To />
+            <From fromDestination={fromDestination} toDestination={toDestination} />
+            <To fromDestination={fromDestination} toDestination={toDestination} />
 
             <View style={styles.splitViewsHolder}>
                 <View style={styles.splitViewContainer}>

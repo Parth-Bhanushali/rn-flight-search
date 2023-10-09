@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 
 import {Splash, Main} from '../screens'
-import {FlightResults} from '../screens'
+import {FlightResults, SelectFlightRoute} from '../screens'
 
 const Stack = createStackNavigator()
 
@@ -16,6 +16,7 @@ const AppNavigator = () => {
                 <Stack.Screen name='Splash' component={Splash} options={{ headerShown: false }} />
 
                 <Stack.Screen name='Flight Results' component={FlightResults} />
+                <Stack.Screen name='SelectFlightRoute' options={{headerShown: false, animationEnabled: true}} component={SelectFlightRoute} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -8,9 +8,10 @@ import Splash from './containers/Splash'
 import Main from './containers/Main'
 
 import FlightResults from "./stacks/FlightResults"
+import SelectFlightRoute from './stacks/SelectFlightRoute'
 
 export {
     Home, Offers, Bookings, Account, More,
     Splash, Main,
-    FlightResults
+    FlightResults, SelectFlightRoute
 }

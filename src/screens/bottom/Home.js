@@ -1,13 +1,15 @@
-import {useState} from 'react'
-import React from 'react'
+import React, {useState} from 'react'
 import {View, Text, TouchableOpacity, FlatList, ScrollView} from 'react-native'
 
+import {PopularDestinationsData} from '../../../data'
 import {FlightSearchInputs, SpecialFares, SearchFlightsButton, DisplayRefundDescription, WhyUs} from '../../components'
 import {homeStyles} from '../../../styles/main'
 
 const tripTypes = ["ONE WAY", "ROUND TRIP", "MULTICITY"]
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation , route}) => {
+    const [fromDestination, setFromDestination] = useState(PopularDestinationsData[1])
+    const [toDestination, setToDestination] = useState(PopularDestinationsData[0])
     const [activeTabType, setActiveTabType] = useState(tripTypes[0])
 
     const TripTab = ({ activeTabType, item }) => {
@@ -21,6 +23,19 @@ const Home = ({ navigation }) => {
             </TouchableOpacity>
         )
     }
+
+    React.useEffect(() => {
+        if (route.params?.data) {
+            // update destinations data on home screen
+            const data = route.params.data
+            const focusedField = route.params.focusedField
+            focusedField === 'from' && setFromDestination(data)
+            focusedField === 'to' && setToDestination(data)
+
+            console.log(data)
+        }
+    }, [route.params?.data.city, route.params?.data.airport] // [route.params?.data]
+    )
 
     return (
         <ScrollView
@@ -39,9 +54,9 @@ const Home = ({ navigation }) => {
                 />
             </View>
 
-            <FlightSearchInputs />
+            <FlightSearchInputs navigation={navigation} fromDestination={fromDestination} toDestination={toDestination} />
             <SpecialFares />
-            <SearchFlightsButton />
+            <SearchFlightsButton from={fromDestination} to={toDestination} />
             <DisplayRefundDescription />
             <WhyUs />
         </ScrollView>

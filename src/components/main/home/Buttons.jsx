@@ -4,16 +4,23 @@ import {StyleSheet} from 'react-native'
 
 import {COLORS, SHADOWS} from '../../../../constants'
 
+var fromDest = ''
+var toDest = ''
+
 const handleSearchFlightPress = () => {
-    alert('Search button clicked')
+    alert('Search flights for: ' + fromDest.city + ' > ' + toDest.city)
 }
 
-export const SearchFlightsButton = () => {
+export const SearchFlightsButton = ({from, to}) => {
+    fromDest = from
+    toDest = to
+
     return (
         <TouchableOpacity
             activeOpacity={1}
             onPress={handleSearchFlightPress}
             style={styles.searchFlightsContainer}>
+
             <Text style={styles.searchFlightsText}>SEARCH FLIGHTS</Text>
         </TouchableOpacity>
     )

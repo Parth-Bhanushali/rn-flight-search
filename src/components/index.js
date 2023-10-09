@@ -4,6 +4,8 @@ import SpecialFares from "./main/home/SpecialFares";
 import { SearchFlightsButton } from "./main/home/Buttons";
 import DisplayRefundDescription from "./main/home/DisplayRefundDescription";
 import WhyUs from "./main/home/WhyUs";
+import Destination from "./main/home/Destination"
+import LocationList from "./main/home/LocationList"
 
 export {
     MainDrawer,
@@ -11,5 +13,7 @@ export {
     SpecialFares,
     SearchFlightsButton,
     DisplayRefundDescription,
-    WhyUs
+    WhyUs,
+    Destination,
+    LocationList
 }
