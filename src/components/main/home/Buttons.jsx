@@ -7,18 +7,23 @@ import {COLORS, SHADOWS} from '../../../../constants'
 var fromDest = ''
 var toDest = ''
 
-const handleSearchFlightPress = () => {
-    alert('Search flights for: ' + fromDest.city + ' > ' + toDest.city)
+const handleSearchFlightPress = (activeTab) => {
+    if (activeTab == 'MULTICITY') {
+        alert('Search functionality is not supported for Multicity')
+        return
+    }
+    alert('Search flights for: ' + fromDest.city + ' > ' + toDest.city + "\n" +
+        'Trip type: ' + activeTab)
 }
 
-export const SearchFlightsButton = ({from, to}) => {
+export const SearchFlightsButton = ({from, to, activeTab}) => {
     fromDest = from
     toDest = to
 
     return (
         <TouchableOpacity
             activeOpacity={1}
-            onPress={handleSearchFlightPress}
+            onPress={() => handleSearchFlightPress(activeTab)}
             style={styles.searchFlightsContainer}>
 
             <Text style={styles.searchFlightsText}>SEARCH FLIGHTS</Text>

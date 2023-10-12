@@ -88,9 +88,9 @@ const DepartureDate = ({date}) => {
     )
 }
 
-const ReturnDate = ({date}) => {
+const ReturnDate = ({date, currentTab}) => {
     // show blue button to ask for adding return date (applicable when inside 'one way' tab)
-    if (date === false || date === null || date === undefined)
+    if (date === false || date === null || date === undefined || currentTab != 'ROUND TRIP')
         return (
             <View>
                 <InputCommon compName={' '} title={' '} titleDesc={' '} />
@@ -176,11 +176,25 @@ const compareDates = (d1, d2) => {
       console.log(`Both dates are equal`);
       return 0
     }
-  };
+};
 
-
-const FlightSearchInputs = ({navigation, fromDestination, toDestination}) => {
+const FlightSearchInputs = ({navigation, fromDestination, toDestination, activeTab, setActiveTab}) => {
     navigator = navigation
+
+    React.useEffect(() => {
+        if (activeTab === 'ONE WAY') {
+            // do something when switched to 'one way'
+        } else if (activeTab === 'ROUND TRIP') {
+            if (returnDate === false || returnDate === null || returnDate === undefined) {
+                setReturnDate(getNextDayDate(departureDate))
+            }
+        } else if (activeTab === 'MULTICITY') {
+            // do something when switched to 'multicity'
+        }
+
+    }, [activeTab]
+    )
+
     
     // stateful values for departure date picker
     const [departureDate, setDepartureDate] = useState(new Date())
@@ -195,7 +209,8 @@ const FlightSearchInputs = ({navigation, fromDestination, toDestination}) => {
         setDepartureDate(params.date)
 
         if (compareDates(params.date, returnDate) === 1) {
-            setReturnDate(false)
+            // setReturnDate(false)
+            setReturnDate(getNextDayDate(params.date))
         }
 
     }, [departureDate, returnDate])
@@ -211,64 +226,82 @@ const FlightSearchInputs = ({navigation, fromDestination, toDestination}) => {
         }
         
         setReturnDate(params.date)
+        setActiveTab('ROUND TRIP')
 
     }, [departureDate, returnDate])
 
-    return (
-        <View>
-            <From fromDestination={fromDestination} toDestination={toDestination} />
-            <To fromDestination={fromDestination} toDestination={toDestination} />
+    if (activeTab != 'MULTICITY') {
+        return (
+            <View>
+                <From fromDestination={fromDestination} toDestination={toDestination} />
+                <To fromDestination={fromDestination} toDestination={toDestination} />
 
-            <View style={styles.splitViewsHolder}>
-                <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => { setOpenDeparturePicker(true) }}
-                    style={styles.splitViewContainer}
-                >
-                    <DepartureDate date={departureDate} />
-                </TouchableOpacity>
+                <View style={styles.splitViewsHolder}>
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => { setOpenDeparturePicker(true) }}
+                        style={styles.splitViewContainer}
+                    >
+                        <DepartureDate date={departureDate} />
+                    </TouchableOpacity>
 
-                <TouchableOpacity 
-                    activeOpacity={1}
-                    onPress={() => { setOpenReturnPicker(true) }}
-                    style={styles.splitViewContainer}>
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => { setOpenReturnPicker(true) }}
+                        style={styles.splitViewContainer}>
 
-                    <ReturnDate date={returnDate} />
-                </TouchableOpacity>
+                        <ReturnDate date={returnDate} currentTab={activeTab} />
+                    </TouchableOpacity>
 
-                {
-                    (returnDate != false && returnDate != null && returnDate != undefined) && (
-                        <TouchableOpacity
-                            onPress={() => {
-                                setReturnDate(false)
-                            }}
-                            style={{ alignSelf: 'flex-start', ...styles.returnDateCloseButton }}
-                        >
-                            <Ionicons name="ios-close-circle-sharp" size={24} color="black" />
-                        </TouchableOpacity>
-                    )
-                }
+                    {
+                        (returnDate != false && returnDate != null && returnDate != undefined && activeTab === 'ROUND TRIP') && (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setReturnDate(false)
+                                    setActiveTab('ONE WAY')
+                                }}
+                                style={{ alignSelf: 'flex-start', ...styles.returnDateCloseButton }}
+                            >
+                                <Ionicons name="ios-close-circle-sharp" size={24} color="black" />
+                            </TouchableOpacity>
+                        )
+                    }
+                </View>
+
+                <TravelersAndClass />
+
+                <DatePickerView
+                    label='Select Departure Date'
+                    date={departureDate}
+                    visible={openDeparturePicker}
+                    onDismiss={onDismissDepartureDatePicker}
+                    onConfirm={onConfirmDepartureDatePicker}
+                />
+
+                <DatePickerView
+                    label='Select Return Date'
+                    date={(returnDate === null || returnDate === false) ? getNextDayDate(departureDate) : returnDate}
+                    visible={openReturnPicker}
+                    onDismiss={onDismissReturnDatePicker}
+                    onConfirm={onConfirmReturnDatePicker}
+                />
             </View>
-
-            <TravelersAndClass />
-
-            <DatePickerView
-                label='Select Departure Date'
-                date={departureDate}
-                visible={openDeparturePicker}
-                onDismiss={onDismissDepartureDatePicker}
-                onConfirm={onConfirmDepartureDatePicker}
-            />
-
-            <DatePickerView
-                label='Select Return Date'
-                date={(returnDate === null || returnDate === false) ? getNextDayDate(departureDate) : returnDate}
-                visible={openReturnPicker}
-                onDismiss={onDismissReturnDatePicker}
-                onConfirm={onConfirmReturnDatePicker}
-            />
-        </View>
-    )
+        )
+    }
+    else {
+        return (
+            <View style={{
+                backgroundColor: 'white', 
+                flex:1,
+                paddingHorizontal: 16,
+                paddingVertical: 100
+            }}>
+                <Text style={{flex:1, alignSelf: 'center', height:'200'}}>
+                    Note: 'Multicity' is currently not supported on this project.
+                </Text>
+            </View>
+        )
+    }
 }
 
 export default FlightSearchInputs

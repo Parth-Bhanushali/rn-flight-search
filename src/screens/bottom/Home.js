@@ -7,7 +7,7 @@ import {homeStyles} from '../../../styles/main'
 
 const tripTypes = ["ONE WAY", "ROUND TRIP", "MULTICITY"]
 
-const Home = ({ navigation , route}) => {
+const Home = ({ navigation , route }) => {
     const [fromDestination, setFromDestination] = useState(PopularDestinationsData[1])
     const [toDestination, setToDestination] = useState(PopularDestinationsData[0])
     const [activeTabType, setActiveTabType] = useState(tripTypes[0])
@@ -54,9 +54,15 @@ const Home = ({ navigation , route}) => {
                 />
             </View>
 
-            <FlightSearchInputs navigation={navigation} fromDestination={fromDestination} toDestination={toDestination} />
+            <FlightSearchInputs 
+                navigation={navigation} 
+                fromDestination={fromDestination} 
+                toDestination={toDestination} 
+                activeTab={activeTabType} 
+                setActiveTab={setActiveTabType}
+            />
             <SpecialFares />
-            <SearchFlightsButton from={fromDestination} to={toDestination} />
+            <SearchFlightsButton from={fromDestination} to={toDestination} activeTab={activeTabType} />
             <DisplayRefundDescription />
             <WhyUs />
         </ScrollView>
