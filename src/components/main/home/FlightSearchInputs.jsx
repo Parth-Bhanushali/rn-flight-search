@@ -1,8 +1,12 @@
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native'
-import React from 'react'
-import {MaterialIcons, Feather} from '@expo/vector-icons'
+import React, {useCallback, useState} from 'react'
+import {MaterialIcons, Feather, Ionicons} from '@expo/vector-icons'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {DatePickerModal, en, registerTranslation} from 'react-native-paper-dates'
 
 import {COLORS} from '../../../../constants'
+
+registerTranslation('en', en) // for paper dates
 
 var navigator = null
 
@@ -73,28 +77,33 @@ const To = ({fromDestination, toDestination}) => {
     )
 }
 
-const DepartureDate = () => {
+const DepartureDate = ({date}) => {
+    const titleValues = getFormattedDateValues(date)
+
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialIcons name='date-range' size={24} style={styles.iconStyle} />
-            <InputCommon compName={'Departure Date'} title={'06 Oct'} titleDesc={'Fri, 2023'} />
+            <InputCommon compName={'Departure Date'} title={titleValues[0]} titleDesc={titleValues[1]} />
         </View>
     )
 }
 
-const ReturnDate = ({ display }) => {
+const ReturnDate = ({date}) => {
     // show blue button to ask for adding return date (applicable when inside 'one way' tab)
-    if (!display) return (
-        <View>
-            <InputCommon compName={' '} title={' '} titleDesc={' '} />
-            <AskToAddReturnDate />
-        </View>
-    )
+    if (date === false || date === null || date === undefined)
+        return (
+            <View>
+                <InputCommon compName={' '} title={' '} titleDesc={' '} />
+                <AskToAddReturnDate />
+            </View>
+        )
+
+    const titleValues = getFormattedDateValues(date)
 
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <MaterialIcons name='date-range' size={24} style={styles.iconStyle} />
-            <InputCommon compName={'Return Date'} title={'07 Oct'} titleDesc={'Sat, 2023'} />
+            <InputCommon compName={'Return Date'} title={titleValues[0]} titleDesc={titleValues[1]} />
         </View>
     )
 }
@@ -108,24 +117,156 @@ const TravelersAndClass = () => {
     )
 }
 
+const DatePickerView = ({label, date, visible, onDismiss, onConfirm}) => {
+    return (
+        <DatePickerModal
+            locale='en'
+            mode='single'
+            disableStatusBarPadding='true'
+            startYear={2023}
+            endYear={2023}
+            uppercase='true'
+            animationType={'none'}
+            saveLabel='Apply'
+            label={label}
+            validRange={{ startDate: new Date() }}
+            date={date}
+            visible={visible}
+            onDismiss={onDismiss}
+            onConfirm={onConfirm}
+        />
+    )
+}
+
+function getFormattedDateValues (date) {
+    const tempDateWithTime = date.toString()
+
+    var day = date.getDate()
+    
+    if (day > 0 && day < 10) {
+        day = `0${day}`
+    }
+
+    const monthName = tempDateWithTime.split(' ') [1]
+    const dayName = tempDateWithTime.split(' ') [0]
+    const year = date.getFullYear()
+
+    const title = `${day} ${monthName}`
+    const titleDesc = `${dayName}, ${year}`
+    return [title, titleDesc]
+}
+
+function getNextDayDate (departureDate) {
+    var nextDayDate = new Date(departureDate)
+    nextDayDate.setDate(nextDayDate.getDate() + 1)
+    return nextDayDate
+}
+
+const compareDates = (d1, d2) => {
+    let date1 = new Date(d1).getTime();
+    let date2 = new Date(d2).getTime();
+  
+    if (date1 < date2) {
+      console.log(`${d1} is less than ${d2}`);
+      return -1
+    } else if (date1 > date2) {
+      console.log(`${d1} is greater than ${d2}`);
+      return 1
+    } else {
+      console.log(`Both dates are equal`);
+      return 0
+    }
+  };
+
+
 const FlightSearchInputs = ({navigation, fromDestination, toDestination}) => {
     navigator = navigation
+    
+    // stateful values for departure date picker
+    const [departureDate, setDepartureDate] = useState(new Date())
+    const [openDeparturePicker, setOpenDeparturePicker] = useState(false)
+    // stateful values for return date picker
+    const [returnDate, setReturnDate] = useState(null)
+    const [openReturnPicker, setOpenReturnPicker] = useState(false)
+
+    const onDismissDepartureDatePicker = useCallback(() => {setOpenDeparturePicker(false)}, [setOpenDeparturePicker])
+    const onConfirmDepartureDatePicker = useCallback((params) => {
+        setOpenDeparturePicker(false)
+        setDepartureDate(params.date)
+
+        if (compareDates(params.date, returnDate) === 1) {
+            setReturnDate(false)
+        }
+
+    }, [departureDate, returnDate])
+
+
+    const onDismissReturnDatePicker = useCallback(() => {setOpenReturnPicker(false)}, [setOpenReturnPicker])
+    const onConfirmReturnDatePicker = useCallback((params) => {
+        setOpenReturnPicker(false)
+        
+        if (compareDates(params.date, departureDate) === -1) {
+            alert('Return date cannot be prior to departure date.')
+            return
+        }
+        
+        setReturnDate(params.date)
+
+    }, [departureDate, returnDate])
+
     return (
         <View>
             <From fromDestination={fromDestination} toDestination={toDestination} />
             <To fromDestination={fromDestination} toDestination={toDestination} />
 
             <View style={styles.splitViewsHolder}>
-                <View style={styles.splitViewContainer}>
-                    <DepartureDate />
-                </View>
+                <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => { setOpenDeparturePicker(true) }}
+                    style={styles.splitViewContainer}
+                >
+                    <DepartureDate date={departureDate} />
+                </TouchableOpacity>
 
-                <View style={styles.splitViewContainer}>
-                    <ReturnDate display={false} />
-                </View>
+                <TouchableOpacity 
+                    activeOpacity={1}
+                    onPress={() => { setOpenReturnPicker(true) }}
+                    style={styles.splitViewContainer}>
+
+                    <ReturnDate date={returnDate} />
+                </TouchableOpacity>
+
+                {
+                    (returnDate != false && returnDate != null && returnDate != undefined) && (
+                        <TouchableOpacity
+                            onPress={() => {
+                                setReturnDate(false)
+                            }}
+                            style={{ alignSelf: 'flex-start', ...styles.returnDateCloseButton }}
+                        >
+                            <Ionicons name="ios-close-circle-sharp" size={24} color="black" />
+                        </TouchableOpacity>
+                    )
+                }
             </View>
 
             <TravelersAndClass />
+
+            <DatePickerView
+                label='Select Departure Date'
+                date={departureDate}
+                visible={openDeparturePicker}
+                onDismiss={onDismissDepartureDatePicker}
+                onConfirm={onConfirmDepartureDatePicker}
+            />
+
+            <DatePickerView
+                label='Select Return Date'
+                date={(returnDate === null || returnDate === false) ? getNextDayDate(departureDate) : returnDate}
+                visible={openReturnPicker}
+                onDismiss={onDismissReturnDatePicker}
+                onConfirm={onConfirmReturnDatePicker}
+            />
         </View>
     )
 }
@@ -184,5 +325,9 @@ const styles = StyleSheet.create({
         color: 'gray',
         fontWeight: 'regular',
         fontSize: 11
+    },
+    returnDateCloseButton: {
+        marginLeft: -24,
+        backgroundColor: 'white'
     }
 })
