@@ -4,9 +4,11 @@ import secure_data from '../assets/icons/secure_data.png'
 import thumb_trust from '../assets/icons/thumb_trust.png'
 
 import line from '../assets/extras/line.png'
+import line_and_dot from '../assets/extras/line_and_dot.png'
 
 import diwaliLogo from '../assets/logos/diwaliLogo.jpg'
-import indigoLogo from '../assets/logos/indigoLogo.jpg'
+import indigo from '../assets/logos/indigo.jpg'
+import kingfisher from '../assets/logos/kingfisher.png'
 
 export default {
     customer_support,
@@ -14,8 +16,9 @@ export default {
     secure_data,
     thumb_trust,
 
-    line,
+    line, line_and_dot,
 
     diwaliLogo,
-    indigoLogo
+    indigo,
+    kingfisher
 }

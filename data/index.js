@@ -1,3 +1,3 @@
-import {PopularDestinationsData, RecentDestinationsData} from "./dummy";
+import {PopularDestinationsData, RecentDestinationsData, AirlinesSchedule} from "./dummy";
 
-export {PopularDestinationsData, RecentDestinationsData}
+export {PopularDestinationsData, RecentDestinationsData, AirlinesSchedule}

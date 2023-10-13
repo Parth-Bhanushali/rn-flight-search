@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {View, Text, Image, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
 import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} from '@expo/vector-icons'; 
 
 import {COLORS, SHADOWS, assets} from '../../../constants';
+import {AirlinesSchedule} from '../../../data';
 
 var navigator = null
 var fromDestination = null
@@ -85,15 +86,15 @@ const ArrowBetweenCodes = ({roundtrip}) => {
     }
 }
 
-const MainHeader = () => {
+const MainHeader = ({dataLength}) => {
     return (
         <View style={styles.mainHeaderContainer}>
             <SearchHeader />
 
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <View>
-                    <Text style={{ alignSelf: 'flex-start', ...styles.mainHeaderTitle }}>Flight Results</Text>
-                    <Text style={{ alignSelf: 'flex-start', ...styles.mainHeaderSubtitle }}>12 Flights found</Text>
+                    <Text style={{ alignSelf: 'flex-start', ...styles.mainHeaderTitle }}>Available Flights</Text>
+                    <Text style={{ alignSelf: 'flex-start', ...styles.mainHeaderSubtitle }}>{dataLength} results found</Text>
                 </View>
 
                 <View style={{ marginRight: 20, alignItems: 'center', flexDirection: 'row' }}>
@@ -107,47 +108,65 @@ const MainHeader = () => {
 }
 
 const ListItem = ({item}) => {
+    const onTimePercent = item.percentOnTime != 'NA' ? item.percentOnTime : null
+    const stopsText = item.stops === "0" ? 'Non stop' :
+                        item.stops === "1" ? `${item.stops} stop` : `${item.stops} stops`
+
     return (
         <View style={styles.listItemBackground}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={assets.indigoLogo} style={styles.listItemCompanyLogo} />
-                    <Text style={styles.listItemCompanyName}>IndiGo</Text>
+                    <Image source={item.image} style={styles.listItemCompanyLogo} />
+                    <Text style={styles.listItemCompanyName}>{item.airline}</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                    <MaterialCommunityIcons name="clock-fast" size={18} color="gray" />
-                    <Text style={styles.listItemOnTime}>100% on time</Text>
-                </View>
+                {
+                    onTimePercent != null &&
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <MaterialCommunityIcons name="clock-fast" size={18} color="gray" />
+                        <Text style={styles.listItemOnTime}>{onTimePercent}% on time</Text>
+                    </View>
+                }
             </View>
 
-
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16}}>
-                <View>
-                    <Text style={styles.listItemTimeAndPrice}>10:00</Text>
-                    <Text style={styles.listItemSubLocation}>{fromDestination.city}</Text>
+                <View style={{alignItems: 'flex-start'}}>
+                    <Text style={styles.listItemTimeAndPrice}>{item.source_time}</Text>
+                    <Text style={{fontSize: 10}}>{fromDestination.city}</Text>
                 </View>
 
                 <View style={{alignItems: 'center'}}>
-                    <Text style={styles.listItemFlightDuration}>2h 15m</Text>
-                    <Image source={assets.line} style={styles.listItemLine} />
-                    <Text style={styles.listItemFlightStopsText}>Non stop</Text>
+                    <Text style={styles.listItemFlightDuration}>{item.duration}</Text>
+                    
+                    {
+                        item.stops === '0' ?
+                            <Image source={assets.line} style={styles.listItemLine} />
+                            :
+                            <Image source={assets.line_and_dot} style={styles.listItemLineWithDot} />
+                    }
+                    
+                    <Text style={styles.listItemFlightStopsText}>{stopsText}</Text>
                 </View>
 
                 <View style={{alignItems: 'center'}}>
-                    <Text style={styles.listItemTimeAndPrice}>12:15</Text>
+                    <Text style={styles.listItemTimeAndPrice}>{item.destination_time}</Text>
                     <Text style={styles.listItemSubLocation}>{toDestination.city}</Text>
                 </View>
 
                 <View style={{alignItems: 'flex-end'}}>
-                    <Text style={styles.listItemTimeAndPrice}>₹ 5,357</Text>
+                    <Text style={styles.listItemTimeAndPrice}>₹ {item.cost}</Text>
                     <Text style={{...styles.listItemSubLocation, color: 'gray'}}>per adult</Text>
                 </View>
             </View>
 
-            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 16}}>
+            <View style={{flexDirection: 'row', alignItems: 'center',  marginTop: 16}}>
                 <Octicons name="dot-fill" size={14} color="orange" />
-                <Text style={styles.listItemPromotionalLabel}>Use HDFCEMI to get FLAT 1000 OFF* on HDFC cards EMI; Get Rs. 200 off using  BMFBONUS*</Text>
+                <Text style={{
+                    ...styles.listItemPromotionalLabel,
+                    includeFontPadding: true, 
+                    marginBottom: 1
+                }}>Use HDFCEMI to get FLAT 1000 OFF* on HDFC cards EMI; Get Rs. 200 off using  BMFBONUS*</Text>
+            
             </View>
         </View>
     )
@@ -173,15 +192,17 @@ const FlightResults = ({ navigation, route }) => {
     departureDate = route.params.depDate
     returnDate = route.params.retDate
     tripType = route.params.activeTab
+    
+    const [data, setData] = useState(AirlinesSchedule)
 
     return (
         <View style={{flex: 1}}>        
-            <MainHeader />
+            <MainHeader dataLength={data.length} />
         
             <FlatList 
-                data={['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']}
-                renderItem={({ item }) => <ListItem item={item} />}
-                keyExtractor={item => item}
+                data={data}
+                renderItem={({item}) => <ListItem item={item} />}
+                keyExtractor={item => item.id}
                 overScrollMode='never'
                 style={{backgroundColor: COLORS.lighterGray}}
                 contentContainerStyle={{rowGap: 10, paddingTop: 12, paddingBottom: 16}}
@@ -295,5 +316,9 @@ const styles = StyleSheet.create({
         width: 60, 
         height:2.5, 
         tintColor: 'green'
+    },
+    listItemLineWithDot: {
+        width: 60,
+        height: 2.5
     }
 })

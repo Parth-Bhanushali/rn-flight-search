@@ -1,3 +1,5 @@
+import {assets} from '../constants'
+
 export const PopularDestinationsData = [
     {
         "city": "Mumbai",
@@ -63,3 +65,49 @@ export const RecentDestinationsData = [
         "code": "STV"
     }
 ]
+
+export const AirlinesSchedule = [
+    {
+        "id": "0",
+        "airline": "Kingfisher",
+        "image": assets.kingfisher,
+        "source": "Vizag",
+        "destination": "Hyderabad",
+        "seats": "10",
+        "source_time": "10:45",
+        "destination_time": "14:00",
+        "duration": "3h 15m",
+        "cost": "5000",
+        "percentOnTime": "NA",
+        "stops": "0"
+    },
+    {
+        "id": "1",
+        "airline": "Indigo",
+        "image": assets.indigo,
+        "source": "Hyderabad",
+        "destination": "Vizag",
+        "seats": "10",
+        "source_time": "18:45",
+        "destination_time": "19:50",
+        "duration": "1h 05m",
+        "cost": "5500",
+        "percentOnTime": "93",
+        "stops": "1"
+    },
+    {
+        "id": "2",
+        "airline": "Indigo",
+        "image": assets.indigo,
+        "source": "Hyderabad",
+        "destination": "Vizag",
+        "seats": "10",
+        "source_time": "08:45",
+        "destination_time": "10:30",
+        "duration": "1h 45m",
+        "cost": "6000",
+        "percentOnTime": "100",
+        "stops": "0"
+    }
+]
+
