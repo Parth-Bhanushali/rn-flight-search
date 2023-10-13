@@ -37,6 +37,18 @@ const Home = ({ navigation , route }) => {
     }, [route.params?.data.city, route.params?.data.airport] // [route.params?.data]
     )
 
+    const handleSearchButtonPress = () => {
+        if (activeTabType == 'MULTICITY') {
+            alert('Search functionality is not supported for Multicity')
+            return
+        }
+
+        navigation.navigate({
+            name: 'Flight Results',
+            // params: {from: fromDestination, to: toDestination, activeTab: activeTabType}
+        })
+    }
+
     return (
         <ScrollView
             overScrollMode='never'
@@ -62,7 +74,7 @@ const Home = ({ navigation , route }) => {
                 setActiveTab={setActiveTabType}
             />
             <SpecialFares />
-            <SearchFlightsButton from={fromDestination} to={toDestination} activeTab={activeTabType} />
+            <SearchFlightsButton from={fromDestination} to={toDestination} onClick={handleSearchButtonPress} />
             <DisplayRefundDescription />
             <WhyUs />
         </ScrollView>
