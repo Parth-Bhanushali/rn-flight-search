@@ -5,6 +5,11 @@ import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} fro
 import {COLORS, SHADOWS, assets} from '../../../constants';
 
 var navigator = null
+var fromDestination = null
+var toDestination = null
+var departureDate = null
+var returnDate = null
+var tripType = null
 
 const handleBack = () => {
     navigator.goBack()
@@ -14,7 +19,37 @@ const handleEdit = () => {
     alert('Edit clicked:\nThis action is currently not provided with implementation.')
 }
 
+function getFormattedDateValues (date) {
+    const tempDateWithTime = date  // string
+    const dateObj = new Date(date)  // date object
+
+    var day = dateObj.getDate()
+    
+    if (day > 0 && day < 10) {
+        day = `0${day}`
+    }
+
+    const monthName = tempDateWithTime.split(' ') [1]
+    const dayName = tempDateWithTime.split(' ') [0]
+    const year = dateObj.getFullYear()
+
+    const title = `${day} ${monthName}`
+    const titleDesc = `${dayName}, ${year}`
+    return [title, titleDesc]
+}
+
+function getFormattedDateForSearchHeader () {
+    let finalDate = ''
+    if (returnDate === null || returnDate === false || returnDate === undefined) {
+        finalDate = getFormattedDateValues(departureDate) [0]
+    } else {
+        finalDate = getFormattedDateValues(departureDate)[0] + ' - ' + getFormattedDateValues(returnDate)[0]
+    }
+    return finalDate
+}
+
 const SearchHeader = () => {
+    const dateForSubtitle = getFormattedDateForSearchHeader()
     return (
         <View style={{
             justifyContent: 'space-between',
@@ -28,8 +63,8 @@ const SearchHeader = () => {
             </TouchableOpacity>
 
             <View style={{ marginLeft: 16, alignSelf: 'flex-start', flex: 1 }}>
-                <Text style={styles.searchHeaderTitle}>New Delhi to Mumbai</Text>
-                <Text style={styles.searchHeaderSubtitle}>13 Oct | 1 Adult | Economy</Text>
+                <Text style={styles.searchHeaderTitle}>{fromDestination.city} to {toDestination.city}</Text>
+                <Text style={styles.searchHeaderSubtitle}>{dateForSubtitle} | 1 Adult | Economy</Text>
             </View>
 
             <TouchableOpacity onPress={handleEdit}>
@@ -62,9 +97,9 @@ const MainHeader = () => {
                 </View>
 
                 <View style={{ marginRight: 20, alignItems: 'center', flexDirection: 'row' }}>
-                    <Text style={styles.cityCodeText}>DEL</Text>
-                    <ArrowBetweenCodes roundtrip={false} />
-                    <Text style={styles.cityCodeText}>BOM</Text>
+                    <Text style={styles.cityCodeText}>{fromDestination.code}</Text>
+                    <ArrowBetweenCodes roundtrip={tripType === 'ROUND TRIP'} />
+                    <Text style={styles.cityCodeText}>{toDestination.code}</Text>
                 </View>
             </View>
         </View>
@@ -90,18 +125,18 @@ const ListItem = ({item}) => {
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16}}>
                 <View>
                     <Text style={styles.listItemTimeAndPrice}>10:00</Text>
-                    <Text style={styles.listItemSubLocation}>New Delhi</Text>
+                    <Text style={styles.listItemSubLocation}>{fromDestination.city}</Text>
                 </View>
 
                 <View style={{alignItems: 'center'}}>
-                    <Text style={{fontWeight: '400', fontSize: 11, paddingBottom: 4}}>2h 15m</Text>
-                    <Image source={assets.line} style={{width: 60, height:2.5, tintColor: 'green'}} />
-                    <Text style={{fontWeight: '400', fontSize: 11, paddingTop: 3, color: 'gray'}}>Non stop</Text>
+                    <Text style={styles.listItemFlightDuration}>2h 15m</Text>
+                    <Image source={assets.line} style={styles.listItemLine} />
+                    <Text style={styles.listItemFlightStopsText}>Non stop</Text>
                 </View>
 
                 <View style={{alignItems: 'center'}}>
                     <Text style={styles.listItemTimeAndPrice}>12:15</Text>
-                    <Text style={styles.listItemSubLocation}>Mumbai</Text>
+                    <Text style={styles.listItemSubLocation}>{toDestination.city}</Text>
                 </View>
 
                 <View style={{alignItems: 'flex-end'}}>
@@ -131,8 +166,14 @@ const PromoListHeader = () => {
     )
 }
 
-const FlightResults = ({ navigation }) => {
+const FlightResults = ({ navigation, route }) => {
     navigator = navigation
+    fromDestination = route.params.from
+    toDestination = route.params.to
+    departureDate = route.params.depDate
+    returnDate = route.params.retDate
+    tripType = route.params.activeTab
+
     return (
         <View style={{flex: 1}}>        
             <MainHeader />
@@ -162,10 +203,18 @@ const styles = StyleSheet.create({
         borderColor: COLORS.lightGray,
     },
     mainHeaderTitle: {
-        marginLeft: 18, marginTop: 8, marginBottom: 2, fontSize: 20, fontWeight: '300' 
+        marginLeft: 18, 
+        marginTop: 8, 
+        marginBottom: 2, 
+        fontWeight: '300',
+        fontSize: 20
     },
     mainHeaderSubtitle: {
-        marginLeft: 18, marginBottom: 8, fontSize: 13, fontWeight: '400', color: 'gray'
+        marginLeft: 18, 
+        marginBottom: 8, 
+        color: 'gray',
+        fontWeight: '400', 
+        fontSize: 13
     },
     cityCodeText: {
         fontSize:14
@@ -211,7 +260,11 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     },
     listItemOnTime: {
-        marginLeft: 4, marginBottom:2, fontWeight: 'regular', fontSize: 12, color: 'gray'
+        marginLeft: 4, 
+        marginBottom:2, 
+        color: 'gray',
+        fontWeight: 'regular', 
+        fontSize: 12 
     },
     listItemTimeAndPrice: {
         fontWeight: 'bold', 
@@ -219,9 +272,28 @@ const styles = StyleSheet.create({
     },
     listItemSubLocation: {
         fontSize: 10, 
-        paddingLeft:2
+        paddingLeft: 3
     },
     listItemPromotionalLabel: {
-        color:COLORS.gray, fontSize: 10, paddingLeft: 8, fontWeight: '400'
+        color:COLORS.gray, 
+        paddingLeft: 8, 
+        fontWeight: '400',
+        fontSize: 10,
+    },
+    listItemFlightDuration: {
+        paddingBottom: 4,
+        fontWeight: '400', 
+        fontSize: 11
+    },
+    listItemFlightStopsText: {
+        paddingTop: 3, 
+        color: 'gray',
+        fontWeight: '400', 
+        fontSize: 11
+    },
+    listItemLine: {
+        width: 60, 
+        height:2.5, 
+        tintColor: 'green'
     }
 })

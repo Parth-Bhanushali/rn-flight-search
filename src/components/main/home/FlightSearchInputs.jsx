@@ -178,7 +178,10 @@ const compareDates = (d1, d2) => {
     }
 };
 
-const FlightSearchInputs = ({navigation, fromDestination, toDestination, activeTab, setActiveTab}) => {
+const FlightSearchInputs = ({
+    navigation, fromDestination, toDestination, activeTab, setActiveTab,
+    departureDate, setDepartureDate, returnDate, setReturnDate
+}) => {
     navigator = navigation
 
     React.useEffect(() => {
@@ -195,12 +198,11 @@ const FlightSearchInputs = ({navigation, fromDestination, toDestination, activeT
     }, [activeTab]
     )
 
-    
     // stateful values for departure date picker
-    const [departureDate, setDepartureDate] = useState(new Date())
+    
     const [openDeparturePicker, setOpenDeparturePicker] = useState(false)
     // stateful values for return date picker
-    const [returnDate, setReturnDate] = useState(null)
+    
     const [openReturnPicker, setOpenReturnPicker] = useState(false)
 
     const onDismissDepartureDatePicker = useCallback(() => {setOpenDeparturePicker(false)}, [setOpenDeparturePicker])

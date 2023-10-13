@@ -10,6 +10,9 @@ const tripTypes = ["ONE WAY", "ROUND TRIP", "MULTICITY"]
 const Home = ({ navigation , route }) => {
     const [fromDestination, setFromDestination] = useState(PopularDestinationsData[1])
     const [toDestination, setToDestination] = useState(PopularDestinationsData[0])
+    const [departureDate, setDepartureDate] = useState(new Date())
+    const [returnDate, setReturnDate] = useState(null)
+
     const [activeTabType, setActiveTabType] = useState(tripTypes[0])
 
     const TripTab = ({ activeTabType, item }) => {
@@ -45,7 +48,13 @@ const Home = ({ navigation , route }) => {
 
         navigation.navigate({
             name: 'Flight Results',
-            // params: {from: fromDestination, to: toDestination, activeTab: activeTabType}
+            params: {
+                from: fromDestination, 
+                to: toDestination,
+                depDate: departureDate.toString(),
+                retDate: activeTabType === 'ROUND TRIP' ? returnDate.toString() : null,
+                activeTab: activeTabType
+            }
         })
     }
 
@@ -70,6 +79,10 @@ const Home = ({ navigation , route }) => {
                 navigation={navigation} 
                 fromDestination={fromDestination} 
                 toDestination={toDestination} 
+                departureDate={departureDate}
+                setDepartureDate={setDepartureDate}
+                returnDate={returnDate}
+                setReturnDate={setReturnDate}
                 activeTab={activeTabType} 
                 setActiveTab={setActiveTabType}
             />
