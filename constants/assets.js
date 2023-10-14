@@ -7,8 +7,15 @@ import line from '../assets/extras/line.png'
 import line_and_dot from '../assets/extras/line_and_dot.png'
 
 import diwaliLogo from '../assets/logos/diwaliLogo.jpg'
+
 import indigo from '../assets/logos/indigo.jpg'
 import kingfisher from '../assets/logos/kingfisher.png'
+import air_asia from '../assets/logos/air_asia.png'
+import akasa_air from '../assets/logos/akasa_air.png'
+import air_india from '../assets/logos/air_india.png'
+import air_india_express from '../assets/logos/air_india_express.png'
+import spicejet from '../assets/logos/spicejet.png'
+import vistara from '../assets/logos/vistara.png'
 
 export default {
     customer_support,
@@ -20,5 +27,11 @@ export default {
 
     diwaliLogo,
     indigo,
-    kingfisher
+    kingfisher,
+    air_asia,
+    akasa_air,
+    air_india,
+    air_india_express,
+    spicejet,
+    vistara
 }

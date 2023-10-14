@@ -3,7 +3,7 @@ import {View, Text, Image, TouchableOpacity, FlatList, StyleSheet} from 'react-n
 import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} from '@expo/vector-icons'; 
 
 import {COLORS, SHADOWS, assets} from '../../../constants';
-import {AirlinesSchedule} from '../../../data';
+import {AirlinesSchedule, FlightsSchedule} from '../../../data';
 
 var navigator = null
 var fromDestination = null
@@ -192,8 +192,10 @@ const FlightResults = ({ navigation, route }) => {
     departureDate = route.params.depDate
     returnDate = route.params.retDate
     tripType = route.params.activeTab
+
+    const sampleData = FlightsSchedule[0].one
     
-    const [data, setData] = useState(AirlinesSchedule)
+    const [data, setData] = useState(sampleData)
 
     return (
         <View style={{flex: 1}}>        
