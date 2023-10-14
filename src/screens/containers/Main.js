@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {Entypo, Ionicons, MaterialIcons} from '@expo/vector-icons'
 
 import {COLORS, STRINGS} from '../../../constants'
-import {Home, Offers, Bookings, Account, More} from '../'
+import {Home, Offers, Bookings, Account, More, FlightResults} from '../'
 
 import {MainDrawer} from '../../components'
 
@@ -66,6 +66,7 @@ const Main = () => {
     return (
         <Drawer.Navigator drawerContent={props => <MainDrawer {...props} />}>
             <Drawer.Screen name={STRINGS.appName} options={{headerShown: true}}  component={BottomTabNavigator} />
+            <Drawer.Screen name='Flight Results' component={FlightResults} options={{headerShown: false}} />
         </Drawer.Navigator>
     )
 }

@@ -15,7 +15,6 @@ const AppNavigator = () => {
                 <Stack.Screen name='Main' component={Main} options={{ headerShown: false }} />
                 <Stack.Screen name='Splash' component={Splash} options={{ headerShown: false }} />
 
-                <Stack.Screen name='Flight Results' component={FlightResults} options={{headerShown: false}} />
                 <Stack.Screen name='SelectFlightRoute' options={{headerShown: false, animationEnabled: true}} component={SelectFlightRoute} />
             </Stack.Navigator>
         </NavigationContainer>

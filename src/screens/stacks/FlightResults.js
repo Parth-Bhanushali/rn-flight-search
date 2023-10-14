@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {View, Text, Image, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
 import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} from '@expo/vector-icons'; 
 
+import {FloatingActionButton} from '../../components'
 import {COLORS, SHADOWS, assets} from '../../../constants';
 import {AirlinesSchedule, FlightsSchedule} from '../../../data';
 
@@ -197,6 +198,10 @@ const FlightResults = ({ navigation, route }) => {
     
     const [data, setData] = useState(sampleData)
 
+    const handleFabPress = () => {
+       alert('fab clicked')
+    }
+
     return (
         <View style={{flex: 1}}>        
             <MainHeader dataLength={data.length} />
@@ -210,6 +215,14 @@ const FlightResults = ({ navigation, route }) => {
                 contentContainerStyle={{rowGap: 10, paddingTop: 12, paddingBottom: 16}}
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={() => <PromoListHeader />}
+            />
+
+            <FloatingActionButton
+                onPress={handleFabPress}
+                style={{
+                    // backgroundColor: 'red', 
+                    backgroundColor: 'white', 
+                }} 
             />
         </View>
     )

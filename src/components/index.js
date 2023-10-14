@@ -6,6 +6,7 @@ import DisplayRefundDescription from "./main/home/DisplayRefundDescription";
 import WhyUs from "./main/home/WhyUs";
 import Destination from "./main/home/Destination"
 import LocationList from "./main/home/LocationList"
+import FloatingActionButton from "./main/home/FloatingActionButton";
 
 export {
     MainDrawer,
@@ -15,5 +16,6 @@ export {
     DisplayRefundDescription,
     WhyUs,
     Destination,
-    LocationList
+    LocationList,
+    FloatingActionButton
 }
