@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import {View, Text, Image, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
+
 import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} from '@expo/vector-icons'; 
 
-import {FloatingActionButton} from '../../components'
+import {FloatingActionButton, PriceFilterModal} from '../../components'
 import {COLORS, SHADOWS, assets} from '../../../constants';
 import {AirlinesSchedule, FlightsSchedule} from '../../../data';
 
@@ -197,9 +198,11 @@ const FlightResults = ({ navigation, route }) => {
     const sampleData = FlightsSchedule[0].one
     
     const [data, setData] = useState(sampleData)
+    const [filterVisible, setFilterVisible] = useState(false)
+    const [sliderRange, setSliderRange] = useState(0)
 
     const handleFabPress = () => {
-       alert('fab clicked')
+       setFilterVisible(true)
     }
 
     return (
@@ -216,6 +219,13 @@ const FlightResults = ({ navigation, route }) => {
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={() => <PromoListHeader />}
             />
+
+            <PriceFilterModal
+                filterVisible={filterVisible}
+                setFilterVisible={setFilterVisible}
+                sliderRange={sliderRange}
+                setSliderRange={setSliderRange}
+            />            
 
             <FloatingActionButton
                 onPress={handleFabPress}
@@ -335,5 +345,23 @@ const styles = StyleSheet.create({
     listItemLineWithDot: {
         width: 60,
         height: 2.5
-    }
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: COLORS.secondary,
+        marginBottom: 16,
+        marginHorizontal: 16
+      },
+      text: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        letterSpacing: 0.25,
+        color: 'white',
+      },
 })

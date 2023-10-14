@@ -7,6 +7,7 @@ import WhyUs from "./main/home/WhyUs";
 import Destination from "./main/home/Destination"
 import LocationList from "./main/home/LocationList"
 import FloatingActionButton from "./main/home/FloatingActionButton";
+import PriceFilterModal from "./main/home/PriceFilterModal"
 
 export {
     MainDrawer,
@@ -17,5 +18,6 @@ export {
     WhyUs,
     Destination,
     LocationList,
-    FloatingActionButton
+    FloatingActionButton,
+    PriceFilterModal
 }
