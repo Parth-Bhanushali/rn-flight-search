@@ -1,4 +1,4 @@
-import {Text, TouchableOpacity} from 'react-native'
+import {View, Text, TouchableOpacity} from 'react-native'
 import React from 'react'
 import {StyleSheet} from 'react-native'
 
@@ -27,7 +27,53 @@ export const SearchFlightsButton = ({from, to, onClick}) => {
     )
 }
 
+export const SwitchButton = ({selectedButton, setSelectedButton}) => {
+    function onPress(index) {
+        index === 0 ? setSelectedButton('DEPART') :
+        index === 1 ? setSelectedButton('RETURN') : false
+    }
+
+    return (
+        <View style={{alignItems: 'center', paddingBottom: 16}}>
+            <View style={styles.switchButtonsContainer}>
+                <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => onPress(0)}
+                >
+                    <Text style={styles.switchText(selectedButton, 'DEPART')}>DEPART</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    activeOpacity={1}
+                    onPress={() => onPress(1)}
+                >
+                    <Text style={styles.switchText(selectedButton, 'RETURN')}>RETURN</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
+    switchButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        padding: 2, 
+        backgroundColor: 'white', 
+        borderRadius: 12, 
+        borderWidth: 1,
+        borderColor: COLORS.lightGray, 
+    },
+    switchText : (selectedButton, item) => ({
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        fontWeight: '500',
+        fontSize: 13,
+        color: selectedButton === item ? 'white' : COLORS.secondary,
+        backgroundColor: selectedButton === item ? COLORS.secondary : 'white',
+        borderRadius: 10
+    }),
     searchFlightsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',

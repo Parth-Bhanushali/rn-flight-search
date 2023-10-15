@@ -5,6 +5,7 @@ import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} fro
 import {FloatingActionButton, PriceFilterModal, AppliedFiltersLabel} from '../../components'
 import {COLORS, SHADOWS, assets} from '../../../constants';
 import {AirlinesSchedule, FlightsSchedule} from '../../../data';
+import {SwitchButton} from '../../components';
 
 var navigator = null
 var fromDestination = null
@@ -87,7 +88,18 @@ const ArrowBetweenCodes = ({roundtrip}) => {
     }
 }
 
-const MainHeader = ({dataLength}) => {
+const MainHeader = ({dataLength, returnDataLength, selectedButton}) => {
+    let visibleDataLength = 0
+    if (tripType === 'ONE WAY') {
+        visibleDataLength = dataLength
+    } else if (tripType === 'ROUND TRIP') {
+        if (selectedButton === 'DEPART') {
+            visibleDataLength = dataLength
+        } else if (selectedButton === 'RETURN') {
+            visibleDataLength = returnDataLength
+        }
+    }
+
     return (
         <View style={styles.mainHeaderContainer}>
             <SearchHeader />
@@ -95,7 +107,7 @@ const MainHeader = ({dataLength}) => {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <View>
                     <Text style={{ alignSelf: 'flex-start', ...styles.mainHeaderTitle }}>Available Flights</Text>
-                    <Text style={{ alignSelf: 'flex-start', ...styles.mainHeaderSubtitle }}>{dataLength} results found</Text>
+                    <Text style={{ alignSelf: 'flex-start', ...styles.mainHeaderSubtitle }}>{visibleDataLength} results found</Text>
                 </View>
 
                 <View style={{ marginRight: 20, alignItems: 'center', flexDirection: 'row' }}>
@@ -108,10 +120,13 @@ const MainHeader = ({dataLength}) => {
     )
 }
 
-const ListItem = ({item}) => {
+const ListItem = ({item, reverseDest}) => {
     const onTimePercent = item.percentOnTime != 'NA' ? item.percentOnTime : null
     const stopsText = item.stops === "0" ? 'Non stop' :
                         item.stops === "1" ? `${item.stops} stop` : `${item.stops} stops`
+
+    const sourceText = reverseDest ? toDestination.city : fromDestination.city
+    const destinationText = reverseDest? fromDestination.city : toDestination.city
 
     return (
         <View style={styles.listItemBackground}>
@@ -133,7 +148,7 @@ const ListItem = ({item}) => {
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16}}>
                 <View style={{alignItems: 'flex-start'}}>
                     <Text style={styles.listItemTimeAndPrice}>{item.source_time}</Text>
-                    <Text style={{fontSize: 10}}>{fromDestination.city}</Text>
+                    <Text style={{fontSize: 10}}>{sourceText}</Text>
                 </View>
 
                 <View style={{alignItems: 'center'}}>
@@ -151,7 +166,7 @@ const ListItem = ({item}) => {
 
                 <View style={{alignItems: 'center'}}>
                     <Text style={styles.listItemTimeAndPrice}>{item.destination_time}</Text>
-                    <Text style={styles.listItemSubLocation}>{toDestination.city}</Text>
+                    <Text style={styles.listItemSubLocation}>{destinationText}</Text>
                 </View>
 
                 <View style={{alignItems: 'flex-end'}}>
@@ -186,6 +201,15 @@ const PromoListHeader = () => {
     )
 }
 
+const LabelNoDataWithMatchingFilter = () => {
+    return (
+        <View style={{ backgroundColor: COLORS.lighterGray, alignItems: 'center', flex: 10 }}>
+            <Text style={styles.infoTextNoFilterMatchResult}
+            >No flights found matching this filter</Text>
+        </View>
+    )
+}
+
 const FlightResults = ({ navigation, route }) => {
     navigator = navigation
     fromDestination = route.params.from
@@ -197,9 +221,11 @@ const FlightResults = ({ navigation, route }) => {
     const sampleData = FlightsSchedule[0].one
     
     const [data, setData] = useState(sampleData)
+    const [returnData, setReturnData] = useState(AirlinesSchedule)
     const [filterModalVisible, setFilterModalVisible] = useState(false)
     const [sliderValue, setSliderValue] = useState(6000)
     const [showAppliedFilters, setShowAppliedFilters] = useState(false)
+    const [selectedButton, setSelectedButton] = useState('DEPART')
 
     const handleFabPress = () => {
        setFilterModalVisible(true)
@@ -209,6 +235,7 @@ const FlightResults = ({ navigation, route }) => {
         setShowAppliedFilters(false)
 
         setData(sampleData)
+        setReturnData(AirlinesSchedule)
     }
 
     function onApplyChanges() {
@@ -216,29 +243,55 @@ const FlightResults = ({ navigation, route }) => {
         setShowAppliedFilters(true)
 
         setData(sampleData.filter(item => item.cost <= sliderValue))
+        setReturnData(AirlinesSchedule.filter(item => item.cost <= sliderValue))
     }
 
     return (
         <View style={{flex: 1}}>        
-            <MainHeader dataLength={data.length} />
-        
-            <FlatList 
-                data={data}
-                renderItem={({item}) => <ListItem item={item} />}
+            <MainHeader dataLength={data.length} returnDataLength={returnData.length} selectedButton={selectedButton} />
+
+            <FlatList
+                data={tripType === 'ONE WAY' ? data : selectedButton === 'DEPART' ? data : selectedButton === 'RETURN' ? returnData : null}
+                renderItem={({item}) => <ListItem item={item} reverseDest={tripType === 'ROUND TRIP' && selectedButton === 'RETURN'} />}
                 keyExtractor={item => item.id}
                 overScrollMode='never'
                 style={{backgroundColor: COLORS.lighterGray}}
                 contentContainerStyle={{rowGap: 10, paddingTop: 12, paddingBottom: 16}}
                 showsVerticalScrollIndicator={false}
-                ListHeaderComponent={() => <PromoListHeader />}
+                ListHeaderComponent={() => {
+                    return (
+                        <View>
+                            {
+                                tripType === 'ROUND TRIP' &&
+                                <SwitchButton
+                                    selectedButton={selectedButton}
+                                    setSelectedButton={setSelectedButton}
+                                />
+                            }
+                            <PromoListHeader />
+                        </View>
+                    )
+                }}
             />
 
             {
+                tripType === 'ONE WAY' &&
                 data.length === 0 &&
-                    <View style={{backgroundColor: COLORS.lighterGray, alignItems: 'center', flex: 10}}>
-                        <Text style={styles.infoTextNoFilterMatchResult}
-                            >No flights found matching this filter</Text>
-                    </View>
+                <LabelNoDataWithMatchingFilter />
+            }
+
+            {
+                tripType === 'ROUND TRIP' &&
+                selectedButton === 'DEPART' &&
+                data.length === 0 &&
+                <LabelNoDataWithMatchingFilter />
+            }
+
+            {
+                tripType === 'ROUND TRIP' &&
+                selectedButton === 'RETURN' &&
+                returnData.length === 0 &&
+                <LabelNoDataWithMatchingFilter />
             }
 
             <PriceFilterModal
