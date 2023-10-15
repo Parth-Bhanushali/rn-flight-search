@@ -1,9 +1,8 @@
 import React, {useState} from 'react'
 import {View, Text, Image, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
-
 import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} from '@expo/vector-icons'; 
 
-import {FloatingActionButton, PriceFilterModal} from '../../components'
+import {FloatingActionButton, PriceFilterModal, AppliedFiltersLabel} from '../../components'
 import {COLORS, SHADOWS, assets} from '../../../constants';
 import {AirlinesSchedule, FlightsSchedule} from '../../../data';
 
@@ -198,11 +197,25 @@ const FlightResults = ({ navigation, route }) => {
     const sampleData = FlightsSchedule[0].one
     
     const [data, setData] = useState(sampleData)
-    const [filterVisible, setFilterVisible] = useState(false)
-    const [sliderRange, setSliderRange] = useState(0)
+    const [filterModalVisible, setFilterModalVisible] = useState(false)
+    const [sliderValue, setSliderValue] = useState(6000)
+    const [showAppliedFilters, setShowAppliedFilters] = useState(false)
 
     const handleFabPress = () => {
-       setFilterVisible(true)
+       setFilterModalVisible(true)
+    }
+
+    function removeFilters() {
+        setShowAppliedFilters(false)
+
+        setData(sampleData)
+    }
+
+    function onApplyChanges() {
+        setFilterModalVisible(false)
+        setShowAppliedFilters(true)
+
+        setData(sampleData.filter(item => item.cost <= sliderValue))
     }
 
     return (
@@ -220,11 +233,20 @@ const FlightResults = ({ navigation, route }) => {
                 ListHeaderComponent={() => <PromoListHeader />}
             />
 
+            {
+                data.length === 0 &&
+                    <View style={{backgroundColor: COLORS.lighterGray, alignItems: 'center', flex: 10}}>
+                        <Text style={styles.infoTextNoFilterMatchResult}
+                            >No flights found matching this filter</Text>
+                    </View>
+            }
+
             <PriceFilterModal
-                filterVisible={filterVisible}
-                setFilterVisible={setFilterVisible}
-                sliderRange={sliderRange}
-                setSliderRange={setSliderRange}
+                filterModalVisible={filterModalVisible}
+                setFilterModalVisible={setFilterModalVisible}
+                sliderValue={sliderValue}
+                setSliderValue={setSliderValue}
+                onApplyChanges={onApplyChanges}
             />            
 
             <FloatingActionButton
@@ -234,9 +256,16 @@ const FlightResults = ({ navigation, route }) => {
                     backgroundColor: 'white', 
                 }} 
             />
+
+            {
+                showAppliedFilters === true &&
+                <AppliedFiltersLabel handleOnClose={removeFilters}/>
+            }
         </View>
     )
 }
+
+
 
 export default FlightResults
 
@@ -346,22 +375,9 @@ const styles = StyleSheet.create({
         width: 60,
         height: 2.5
     },
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: COLORS.secondary,
-        marginBottom: 16,
-        marginHorizontal: 16
-      },
-      text: {
+    infoTextNoFilterMatchResult: {
+        color: COLORS.darkGray,
         fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: 'white',
-      },
+        fontWeight: '500'
+    }
 })

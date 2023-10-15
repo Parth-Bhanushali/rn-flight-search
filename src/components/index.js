@@ -8,6 +8,7 @@ import Destination from "./main/home/Destination"
 import LocationList from "./main/home/LocationList"
 import FloatingActionButton from "./main/home/FloatingActionButton";
 import PriceFilterModal from "./main/home/PriceFilterModal"
+import AppliedFiltersLabel from "./main/home/AppliedFiltersLabel"
 
 export {
     MainDrawer,
@@ -19,5 +20,6 @@ export {
     Destination,
     LocationList,
     FloatingActionButton,
-    PriceFilterModal
+    PriceFilterModal,
+    AppliedFiltersLabel
 }
