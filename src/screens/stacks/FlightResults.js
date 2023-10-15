@@ -4,7 +4,7 @@ import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} fro
 
 import {FloatingActionButton, PriceFilterModal, AppliedFiltersLabel} from '../../components'
 import {COLORS, SHADOWS, assets} from '../../../constants';
-import {AirlinesSchedule, FlightsSchedule} from '../../../data';
+import {FlightsSchedule} from '../../../data';
 import {SwitchButton} from '../../components';
 
 var navigator = null
@@ -218,10 +218,11 @@ const FlightResults = ({ navigation, route }) => {
     returnDate = route.params.retDate
     tripType = route.params.activeTab
 
-    const sampleData = FlightsSchedule[0].one
+    const sampleData = FlightsSchedule[0].one    // use for one way or for depart if round trip 
+    const sampleData2 = FlightsSchedule[0].two   // use for return
     
     const [data, setData] = useState(sampleData)
-    const [returnData, setReturnData] = useState(AirlinesSchedule)
+    const [returnData, setReturnData] = useState(sampleData2)
     const [filterModalVisible, setFilterModalVisible] = useState(false)
     const [sliderValue, setSliderValue] = useState(6000)
     const [showAppliedFilters, setShowAppliedFilters] = useState(false)
@@ -235,7 +236,7 @@ const FlightResults = ({ navigation, route }) => {
         setShowAppliedFilters(false)
 
         setData(sampleData)
-        setReturnData(AirlinesSchedule)
+        setReturnData(sampleData2)
     }
 
     function onApplyChanges() {
@@ -243,7 +244,7 @@ const FlightResults = ({ navigation, route }) => {
         setShowAppliedFilters(true)
 
         setData(sampleData.filter(item => item.cost <= sliderValue))
-        setReturnData(AirlinesSchedule.filter(item => item.cost <= sliderValue))
+        setReturnData(sampleData2.filter(item => item.cost <= sliderValue))
     }
 
     return (
