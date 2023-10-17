@@ -2,6 +2,8 @@ import customer_support from '../assets/icons/customer_support.png'
 import happy_members from '../assets/icons/happy_members.png'
 import secure_data from '../assets/icons/secure_data.png'
 import thumb_trust from '../assets/icons/thumb_trust.png'
+import app_splash from '../assets/icons/app_splash.png'
+import app_main_header from '../assets/icons/app_main_header.png'
 
 import line from '../assets/extras/line.png'
 import line_and_dot from '../assets/extras/line_and_dot.png'
@@ -22,6 +24,7 @@ export default {
     happy_members,
     secure_data,
     thumb_trust,
+    app_splash, app_main_header,
 
     line, line_and_dot,
 

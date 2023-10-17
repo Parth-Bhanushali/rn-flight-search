@@ -326,10 +326,10 @@ export default FlightResults
 const styles = StyleSheet.create({
     mainHeaderContainer: {
         backgroundColor: 'white',
-        ...SHADOWS.dark, 
         borderRadius: 1, 
-        borderWidth: 1, 
+        borderBottomWidth: 1, 
         borderColor: COLORS.lightGray,
+        ...SHADOWS.dark, 
     },
     mainHeaderTitle: {
         marginLeft: 18, 

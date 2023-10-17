@@ -7,7 +7,7 @@ import {COLORS} from './constants';
 export default function App() {
     return (
         <SafeAreaView style={{flex: 1}}>
-            <StatusBar barStyle={'light-content'} backgroundColor={COLORS.lightGray} />
+            <StatusBar barStyle={'dark-content'} backgroundColor='white' />
             <AppNavigator />
         </SafeAreaView>
     );

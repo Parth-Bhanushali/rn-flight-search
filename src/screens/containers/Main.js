@@ -2,11 +2,12 @@ import React from 'react'
 import {createDrawerNavigator} from '@react-navigation/drawer'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {Entypo, Ionicons, MaterialIcons} from '@expo/vector-icons'
+import {StyleSheet} from 'react-native'
 
-import {COLORS, STRINGS} from '../../../constants'
+import {COLORS, STRINGS, SHADOWS} from '../../../constants'
 import {Home, Offers, Bookings, Account, More, FlightResults} from '../'
 
-import {MainDrawer} from '../../components'
+import {MainDrawer, HeaderLeft, HeaderTitle, HeaderRight} from '../../components'
 
 const Drawer = createDrawerNavigator()
 const Tab = createBottomTabNavigator()
@@ -65,10 +66,35 @@ const screenOptions = {
 const Main = () => {
     return (
         <Drawer.Navigator drawerContent={props => <MainDrawer {...props} />}>
-            <Drawer.Screen name={STRINGS.appName} options={{headerShown: true}}  component={BottomTabNavigator} />
+            <Drawer.Screen name={STRINGS.appName} options={{
+                headerShown: true, 
+                headerLeft: (props) => <HeaderLeft {...props}/>,
+                headerTitle: (props) => <HeaderTitle {...props} />,
+                headerRight: (props) => <HeaderRight {...props}/>,
+                headerTitleAlign: 'center',
+                headerTitleContainerStyle: styles.headerTitleContainerStyle,
+                headerStyle: styles.headerStyle,
+
+            }}
+                component={BottomTabNavigator} />
             <Drawer.Screen name='Flight Results' component={FlightResults} options={{headerShown: false}} />
         </Drawer.Navigator>
     )
 }
 
 export default Main
+
+const styles = StyleSheet.create({
+    headerTitleContainerStyle: {
+        // backgroundColor: 'yellow',
+        marginVertical: 8, 
+        width: '100%', 
+        flex:1,
+        alignItems: 'center'
+    },
+    headerStyle: {
+        borderBottomColor: COLORS.lightGray, 
+        borderBottomWidth: 0.5,
+        ...SHADOWS.light
+    }
+})

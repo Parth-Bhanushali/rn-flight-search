@@ -9,6 +9,9 @@ import LocationList from "./main/home/LocationList"
 import FloatingActionButton from "./main/home/FloatingActionButton";
 import PriceFilterModal from "./main/home/PriceFilterModal"
 import AppliedFiltersLabel from "./main/home/AppliedFiltersLabel"
+import HeaderLeft from "./main/common/HeaderLeft";
+import HeaderTitle from "./main/common/HeaderTitle";
+import HeaderRight from "./main/common/HeaderRight";
 
 export {
     MainDrawer,
@@ -21,5 +24,8 @@ export {
     LocationList,
     FloatingActionButton,
     PriceFilterModal,
-    AppliedFiltersLabel
+    AppliedFiltersLabel,
+    HeaderLeft,
+    HeaderTitle,
+    HeaderRight
 }
