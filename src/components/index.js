@@ -12,6 +12,7 @@ import AppliedFiltersLabel from "./main/home/AppliedFiltersLabel"
 import HeaderLeft from "./main/common/HeaderLeft";
 import HeaderTitle from "./main/common/HeaderTitle";
 import HeaderRight from "./main/common/HeaderRight";
+import Watermark from "./main/common/Watermark";
 
 export {
     MainDrawer,
@@ -27,5 +28,6 @@ export {
     AppliedFiltersLabel,
     HeaderLeft,
     HeaderTitle,
-    HeaderRight
+    HeaderRight,
+    Watermark
 }
