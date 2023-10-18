@@ -2,7 +2,7 @@ import React from 'react'
 import {createDrawerNavigator} from '@react-navigation/drawer'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {Entypo, Ionicons, MaterialIcons} from '@expo/vector-icons'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, useWindowDimensions} from 'react-native'
 
 import {COLORS, STRINGS, SHADOWS} from '../../../constants'
 import {Home, Offers, Bookings, Account, More, FlightResults} from '../'
@@ -74,18 +74,29 @@ const screenOptions = {
 }
 
 const Main = () => {
-    return (
-        <Drawer.Navigator drawerContent={props => <MainDrawer {...props} />}>
-            <Drawer.Screen name={STRINGS.appName} options={{
-                headerShown: true, 
-                headerLeft: (props) => <HeaderLeft {...props}/>,
-                headerTitle: (props) => <HeaderTitle {...props} />,
-                headerRight: (props) => <HeaderRight {...props}/>,
-                headerTitleAlign: 'center',
-                headerTitleContainerStyle: styles.headerTitleContainerStyle,
-                headerStyle: styles.headerStyle,
+    const {width, height} = useWindowDimensions()
 
+    return (
+        <Drawer.Navigator 
+            screenOptions={{
+                drawerType: width > 800 ? 'permanent' : 'front',
+                screenContainerStyle: {
+                    maxWidth: 800, width: '100%', alignSelf: 'center'
+                }
             }}
+            drawerContent={props => <MainDrawer {...props} />}
+        >
+            <Drawer.Screen
+                name={STRINGS.appName}
+                options={{
+                    headerShown: true,
+                    headerLeft: (props) => <HeaderLeft {...props} />,
+                    headerTitle: (props) => <HeaderTitle {...props} />,
+                    headerRight: (props) => <HeaderRight {...props} />,
+                    headerTitleAlign: 'center',
+                    headerTitleContainerStyle: styles.headerTitleContainerStyle,
+                    headerStyle: styles.headerStyle
+                }}
                 component={BottomTabNavigator} />
             <Drawer.Screen name='Flight Results' component={FlightResults} options={{unmountOnBlur: true, headerShown: false}} />
         </Drawer.Navigator>
