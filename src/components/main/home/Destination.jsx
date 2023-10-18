@@ -35,16 +35,16 @@ export default Destination
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 16,
-        marginVertical: 8,
+        marginHorizontal: 10,
+        marginVertical: 2,
         paddingHorizontal: 8,
-        backgroundColor: COLORS.lighterGray 
+        backgroundColor: COLORS.white 
     },
     verticalTextsContainer: {
         paddingVertical: 8
     },
     iconStyle: {
-        marginRight: 8,
+        marginRight: 16,
         color: 'gray',
         opacity: 0.7
     },

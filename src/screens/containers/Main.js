@@ -17,30 +17,40 @@ const BottomTabNavigator = () => {
         <Tab.Screen name='Home' component={Home}
             options={{
                 tabBarLabel: 'Home',
+                tabBarLabelPosition: 'below-icon',
+                tabBarIconStyle: {marginTop: 2},
                 tabBarIcon: ({ focused, size, color }) => <Entypo name="home" size={size * 0.95} color={color} />
             }}
         />
         <Tab.Screen name='Offers' component={Offers}
             options={{
                 tabBarLabel: 'Offers',
+                tabBarIconStyle: {marginTop: 2},
+                tabBarLabelPosition: 'below-icon',
                 tabBarIcon: ({ focused, size, color }) => <Entypo name="briefcase" size={size * 0.9} color={color} />
             }}
         />
         <Tab.Screen name='Bookings' component={Bookings}
             options={{
                 tabBarLabel: 'Bookings',
+                tabBarIconStyle: {marginTop: 2},
+                tabBarLabelPosition: 'below-icon',
                 tabBarIcon: ({ focused, size, color }) => <MaterialIcons name="payments" size={size * 1.1} color={color} />
             }}
         />
         <Tab.Screen name='Account' component={Account}
             options={{
                 tabBarLabel: 'Account',
+                tabBarIconStyle: {marginTop: 2},
+                tabBarLabelPosition: 'below-icon',
                 tabBarIcon: ({ focused, size, color }) => <Entypo name="user" size={size * 0.9} color={color} />
             }}
         />
         <Tab.Screen name='More' component={More}
             options={{
                 tabBarLabel: 'More',
+                tabBarIconStyle: {marginTop: 2},
+                tabBarLabelPosition: 'below-icon',
                 tabBarIcon: ({ focused, size, color }) => <Ionicons name="grid" size={size * 0.9} color={color} />
             }}
         />
@@ -54,12 +64,12 @@ const screenOptions = {
     headerShown: false,
     tabBarStyle: {
         backgroundColor: COLORS.white,
-        height: 57,
-        paddingBottom: 5
+        height: 57
     },
     tabBarLabelStyle: {
         fontSize: 12.5,
-        fontWeight: '500'
+        fontWeight: '500',
+        marginBottom: 5
     }
 }
 
@@ -77,7 +87,7 @@ const Main = () => {
 
             }}
                 component={BottomTabNavigator} />
-            <Drawer.Screen name='Flight Results' component={FlightResults} options={{headerShown: false}} />
+            <Drawer.Screen name='Flight Results' component={FlightResults} options={{unmountOnBlur: true, headerShown: false}} />
         </Drawer.Navigator>
     )
 }

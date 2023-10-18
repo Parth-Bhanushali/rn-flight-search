@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         marginBottom: 24,
         bottom: 0,
         right: 0,
-        ...SHADOWS.dark,
+        ...SHADOWS.medium,
+        shadowColor: 'black'
     }
 })

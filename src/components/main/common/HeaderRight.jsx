@@ -3,11 +3,11 @@ import React from 'react'
 import {MaterialIcons, Feather} from '@expo/vector-icons'
 
 const onLanguageIconPress = () => {
-    alert('Display list of languages to choose from.\nFunctionality not implemented.')
+    alert('Clicked on: Languages\nTodo: Display options to change locale\n\nNo further implementation provided.')
 }
 
 const onOptionsIconPress = () => {
-    alert('Display context menu for more available actions.\nFunctionality not implemented.')
+    alert('Clicked on: More options\nTodo: Display context menu with available actions\n\nNo further implementation provided.')
 }
 
 const HeaderRight = () => {

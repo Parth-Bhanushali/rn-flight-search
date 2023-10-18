@@ -109,11 +109,15 @@ const ReturnDate = ({date, currentTab}) => {
 }
 
 const TravelersAndClass = () => {
+    const handlePressOnTravelers = () => {
+        alert('Defaults to :\nNo. of Travelers: 1\nReservation class: Economy\n\nNo further implementation provided.')
+    }
+
     return (
-        <View style={styles.container}>
+        <TouchableOpacity activeOpacity={1} onPress={handlePressOnTravelers} style={styles.container}>
             <Feather name='user' size={24} style={styles.iconStyle} />
             <InputCommon compName={'Travelers & Class'} title={'1,'} titleDesc={'Economy/Premium Economy'} />
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -122,7 +126,6 @@ const DatePickerView = ({label, date, visible, onDismiss, onConfirm}) => {
         <DatePickerModal
             locale='en'
             mode='single'
-            disableStatusBarPadding='true'
             startYear={2023}
             endYear={2023}
             uppercase='true'

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, Text, Image, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
+import {View, Text, Image, TouchableOpacity, FlatList, StyleSheet, StatusBar} from 'react-native'
 import {Ionicons, MaterialIcons, Octicons, MaterialCommunityIcons, Fontisto} from '@expo/vector-icons'; 
 
 import {FloatingActionButton, PriceFilterModal, AppliedFiltersLabel} from '../../components'
@@ -19,7 +19,7 @@ const handleBack = () => {
 }
 
 const handleEdit = () => {
-    alert('Edit clicked:\nThis action is currently not provided with implementation.')
+    alert('Clicked on: Edit\nTodo: Allow editing locations\n\nNo further implementation provided.')
 }
 
 function getFormattedDateValues (date) {
@@ -249,6 +249,8 @@ const FlightResults = ({ navigation, route }) => {
 
     return (
         <View style={{flex: 1}}>        
+            <StatusBar animated={false}  barStyle={'dark-content'} backgroundColor={filterModalVisible ? '#000000aa' : 'white'} />
+            
             <MainHeader dataLength={data.length} returnDataLength={returnData.length} selectedButton={selectedButton} />
 
             <FlatList

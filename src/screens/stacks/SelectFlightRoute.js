@@ -1,4 +1,4 @@
-import {StyleSheet, Keyboard, Text, View, TextInput, TouchableOpacity} from 'react-native'
+import {StyleSheet, Keyboard, Text, View, TextInput, ScrollView, TouchableOpacity} from 'react-native'
 import React, {useState} from 'react'
 import {Ionicons, MaterialIcons} from '@expo/vector-icons';
 
@@ -189,14 +189,20 @@ const SelectFlightRoute = ({ navigation, route }) => {
                 }
             </TouchableOpacity>
 
-            
-            <LocationList header={listHeaderTitle} listData={listData} handleDestinationPressed={handleDestinationPressed} />
+            {/* TODO: Workaround is not always a solution */}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                overScrollMode='never' 
+                keyboardShouldPersistTaps={'handled'}
+            >
+                <LocationList header={listHeaderTitle} listData={listData} handleDestinationPressed={handleDestinationPressed} />
 
-            { noSuggestionsDisplay &&
-                <Text style={{alignSelf:'center'}}>No Suggestions Found</Text> }
+                { noSuggestionsDisplay &&
+                    <Text style={{alignSelf:'center'}}>No Suggestions Found</Text> }
 
-            { listHeaderTitle === 'RECENT SEARCHES' &&
-                <LocationList header={'POPULAR CITIES'} listData={PopularDestinationsData} handleDestinationPressed={handleDestinationPressed} /> }
+                { listHeaderTitle === 'RECENT SEARCHES' &&
+                    <LocationList header={'POPULAR CITIES'} listData={PopularDestinationsData} handleDestinationPressed={handleDestinationPressed} showFooterSpace={true} /> }
+            </ScrollView>
         </View>
     )
 }

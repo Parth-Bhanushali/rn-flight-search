@@ -3,7 +3,13 @@ import React from 'react'
 
 import Destination from './Destination';
 
-const LocationList = ({header, listData, handleDestinationPressed}) => {
+const FooterSpace = ({show}) => {
+    return (
+        show && <View style={{marginBottom: 16}} />
+    )
+}
+
+const LocationList = ({header, listData, handleDestinationPressed, showFooterSpace}) => {
     return (
         <View>
             <Text style={styles.header}>{header}</Text>
@@ -25,6 +31,7 @@ const LocationList = ({header, listData, handleDestinationPressed}) => {
                 keyExtractor={(item) => {
                     return (item.city.replace(/ /g, '') + item.city.length)
                 }}
+                ListFooterComponent={() => <FooterSpace show={showFooterSpace} />}
             />
         </View>
     )

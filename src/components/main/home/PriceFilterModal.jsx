@@ -16,7 +16,7 @@ const PriceFilterModal = ({ filterModalVisible, setFilterModalVisible, sliderVal
             visible={filterModalVisible} >
             <View style={{ backgroundColor: '#000000aa', justifyContent: 'center', flex: 1 }}>
                 <View style={{
-                    backgroundColor: COLORS.lighterGray,
+                    backgroundColor: COLORS.white,
                     margin: 24,
                     paddingBottom: 16,
                     justifyContent: 'center',
