@@ -2,6 +2,7 @@
 [https://bookmyflight-by-parth.netlify.app](https://bookmyflight-by-parth.netlify.app)
 
 # Screenshots
+**Click on images to enlarge**
 ### Android
 <img src=screenshots/android/android_ss_1.png height=500 > <img src=screenshots/android/android_ss_2.png height=500> <img src=screenshots/android/android_ss_3.png height=500>
 
