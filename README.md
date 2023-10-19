@@ -1,5 +1,5 @@
 # Host link
-[https://bookmyflight-by-parth.netlify.app](bookmyflight-by-parth.netlify.app)
+[https://bookmyflight-by-parth.netlify.app](https://bookmyflight-by-parth.netlify.app)
 
 # Screenshots
 ### Android
